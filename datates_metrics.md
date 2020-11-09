@@ -26,6 +26,77 @@ ULR:
 ULR：
 > http://storage.googleapis.com/openimages/web/index.html
 
+## 数据格式
+### VOC
+├── annotations\
+│   ├── xxx1.xml\
+│   ├── xxx2.xml\
+│   ├── xxx3.xml\
+│   |   ...\
+├── images\
+│   ├── xxx1.png\
+│   ├── xxx2.png\
+│   ├── xxx3.png\
+│   |   ...\
+├── label_list.txt\
+├── train.txt\
+└── valid.txt
+
+label_list.txt;类别名称列表;\
+每行表示一个类别
+
+train.txt 训练图像列表；\
+图像路径+标注路径\
+./images/road839.png ./annotations/road839.xml
+
+valid.txt 验证图像列表；\
+./images/road218.png ./annotations/road218.xml
+
+xml文件\
+filename，表示图像名称\
+`<filename>road650.png</filename>`\
+size，表示图像尺寸。包括：图像宽度、图像高度、图像深度\
+`
+<size>
+  <width>300</width>
+  <height>400</height>
+  <depth>3</depth>
+</size>
+`
+
+object字段，表示每个物体。包括\
+`name: 目标物体类别名称`\
+`pose: 关于目标物体姿态描述（非必须字段）`\
+`truncated: 目标物体目标因为各种原因被截断（非必须字段）`\
+`occluded: 目标物体是否被遮挡（非必须字段）`\
+`difficult: 目标物体是否是很难识别（非必须字段）`\
+`bndbox: 物体位置坐标，用左上角坐标和右下角坐标表示：xmin、ymin、xmax、ymax`
+
+### COCO
+是指将所有训练图像的标注都存放到一个json文件中。数据以字典嵌套的形式存放。
+
+annotations/\
+├── train.json\
+└── valid.json\
+images/\
+├── road0.png\
+├── road100.png
+
+`json文件中存放了 info licenses images annotations categories的信息:`\
+`info: 存放标注文件标注时间、版本等信息。`\
+`licenses: 存放数据许可信息。`\
+`images: 存放一个list，存放所有图像的图像名，下载地址，图像宽度，图像高度，图像在数据集中的id等信息`。\
+`annotations: 存放一个list，存放所有图像的所有物体区域的标注信息，每个目标物体标注以下信息`：\
+{\
+	'area': 899, \
+	'iscrowd': 0, \
+    'image_id': 839, \
+    'bbox': [114, 126, 31, 29], \
+    'category_id': 0, 'id': 1, \
+    'ignore': 0, \
+    'segmentation': []\
+}
+
 # metrics
 FPS
 > 每秒帧数
@@ -52,10 +123,18 @@ IOU
 >
 > IOU>阈值为'对'，IOU小于阈值为'错'
 
+accuracy
+> 准确率
+
+
 precision
 > 精度
 >
 > P=TP/(TP+FP)=TP/(all Pred)
+>
+> 注：
+>> 准确率是与真值的接近程度，精度是测量值之间的准确程度
+
 
 recall
 > 召回率
